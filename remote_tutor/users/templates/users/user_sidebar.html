@@ -1,0 +1,65 @@
+{% load static %}
+{% block compressed-css %}
+    <link rel="stylesheet" href="{% static 'flags/sprite.css' %}">
+{% endblock %}
+
+<div class="col-md-3 ">
+		     <div class="list-group ">
+              <a href="#" class="list-group-item list-group-item-action">Dashboard</a>
+              <a href="{% url 'users:detail' username=request.user.username %}" class="list-group-item list-group-item-action active">Profile</a>
+              <a href="{% url 'users:update' %}" class="list-group-item list-group-item-action">Edit Profile</a>
+              <a href="{% url 'account_email' %}" class="list-group-item list-group-item-action">Email</a>
+              <a href="#" class="list-group-item list-group-item-action">Enquiry</a>
+              <a href="#" class="list-group-item list-group-item-action">Dealer</a>
+              <a href="#" class="list-group-item list-group-item-action">Media</a>
+              <a href="#" class="list-group-item list-group-item-action">Post</a>
+              <a href="#" class="list-group-item list-group-item-action">Category</a>
+              <a href="#" class="list-group-item list-group-item-action">New</a>
+              <a href="#" class="list-group-item list-group-item-action">Comments</a>
+              <a href="#" class="list-group-item list-group-item-action">Appearance</a>
+              <a href="#" class="list-group-item list-group-item-action">Reports</a>
+              <a href="#" class="list-group-item list-group-item-action">Settings</a>
+
+
+            </div>
+		</div>
+
+{#<!-- User Image -->#}
+{#<div class="u-block-hover g-pos-rel">#}
+{#    <figure>#}
+{#        <img class="img-fluid w-100 u-block-hover__main--zoom-v1"#}
+{#             src="{{ MEDIA_URL }}{{ user.thumbnail }}" alt="{{ user.username }}">#}
+{#    </figure>#}
+{#    <!-- User Info -->#}
+{#    <span class="g-pos-abs g-top-20 g-left-0">#}
+{#                  <a class="btn btn-sm u-btn-primary rounded-0" href="#!">{{ user.username }}</a>#}
+{#                </span>#}
+{#    <!-- End User Info -->#}
+{#</div>#}
+{#<!-- User Image -->#}
+{##}
+{#<!-- Sidebar Navigation -->#}
+{#<div class="list-group list-group-border-0">#}
+{#    {% with matched_url_name=request.resolver_match.url_name %}#}
+{#        <a href="{% url 'users:detail' user.username %}"#}
+{#           class="list-group-item list-group-item-action justify-content-between#}
+{#{% if matched_url_name == 'profile' %}active{% endif %}">#}
+{#            <span><i class="icon-cursor "></i>Profile</span>#}
+{#        </a>#}
+{#        {% if user == request.user %}#}
+{#            <a href="{% url 'users:update' %}" class="list-group-item list-group-item-action justify-content-between">#}
+{#                <span><i class="icon-home"></i> Update Profile</span>#}
+{#            </a>#}
+{##}
+{#            <a href="{% url 'account_email' %}"#}
+{#               class="list-group-item list-group-item-action justify-content-between">#}
+{#                <span><i class="icon-cursor g-pos-rel g-top-1 g-mr-8"></i>E-Mail Settings</span>#}
+{#            </a>#}
+{##}
+{##}
+{#        {% endif %}#}
+{##}
+{##}
+{#    {% endwith %}#}
+{#</div>#}
+<!-- End Sidebar Navigation -->

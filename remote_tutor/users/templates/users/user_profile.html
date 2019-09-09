@@ -1,0 +1,40 @@
+{% extends 'users/base.html' %}
+{% block user_profile %}
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Your Profile</h4>
+            <hr>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group row">
+              <label for="username" class="col-4 col-form-label">Full Name</label>
+              <div class="col-8">
+                <span>{{ request.user.get_full_name }}</span>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="username" class="col-4 col-form-label">Gender</label>
+              <div class="col-8">
+                <span>{{ request.user.gender }}</span>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="username" class="col-4 col-form-label">Phone No</label>
+              <div class="col-8">
+                <span>{{ request.user.phone_no }}</span>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
