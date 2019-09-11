@@ -27,3 +27,4 @@ class User(AbstractUser, TimeStampedModel, SoftDeletableModel):
 
     def get_absolute_url(self):
         return reverse('users:profile', kwargs={'username': self.username})
+

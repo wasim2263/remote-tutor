@@ -1,6 +1,9 @@
+from django import forms as django_forms
 from django.contrib.auth import get_user_model, forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+
+from remote_tutor.tutor.models import Tutor
 
 User = get_user_model()
 
@@ -11,7 +14,6 @@ class UserChangeForm(forms.UserChangeForm):
 
 
 class UserCreationForm(forms.UserCreationForm):
-
     error_message = forms.UserCreationForm.error_messages.update(
         {"duplicate_username": _("This username has already been taken.")}
     )
@@ -28,3 +30,9 @@ class UserCreationForm(forms.UserCreationForm):
             return username
 
         raise ValidationError(self.error_messages["duplicate_username"])
+
+
+class TutorForm(django_forms.ModelForm):
+    class Meta:
+        model = Tutor
+        fields = ['school', 'college', 'university', 'department', 'current_occupation', 'current_institute', ]

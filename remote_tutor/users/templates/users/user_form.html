@@ -1,48 +1,31 @@
-{% extends "base.html" %}
-{% load crispy_forms_tags i18n static %}
-
-{% block title %}{{ user.username }} | Update profile | Review Bangla{% endblock %}
-{% block breadcrumb %}
-    <section class="g-bg-gray-light-v5 g-py-30" style="background-image: url({% static 'images/pattern2.png' %});">
-        <div class="container">
-            <ul class="u-list-inline">
-                <li class="list-inline-item g-mr-7">
-                    <a class="u-link-v5 g-color-main g-color-primary--hover"
-                       href="/">{% trans 'Home' context 'nav' %}</a>
-                    <i class="fa fa-angle-right g-ml-7"></i>
-                </li>
-                <li class="list-inline-item g-mr-7">
-                    <a class="u-link-v5 g-color-main g-color-primary--hover"
-                       href="{% url 'users:detail' user.username %}">{% trans 'Profile' %}</a>
-                    <i class="fa fa-angle-right g-ml-7"></i>
-                </li>
-                <li class="list-inline-item g-color-primary">
-                    <span>{% trans 'Edit Profile' %}</span>
-                </li>
-            </ul>
+{% extends 'users/base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{{ user.username }}{% endblock %}
+{% block user_profile %}
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Update Profile</h4>
+            <hr>
+          </div>
         </div>
-    </section>
-{% endblock %}
-
-{% block content %}
-    <div class="container g-py-50">
-        <div class="row justify-content-center g-mb-20">
-            <div class="col-md-8">
-                {% crispy form %}
-            </div>
+        <div class="row">
+          <div class="col-md-12">
+            <form class="form-horizontal" method="post" action="{% url 'users:update' %}">
+                {% csrf_token %}
+                {{ form|crispy }}
+              <div class="control-group">
+                <div class="controls">
+                  <button type="submit" class="btn">Update</button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+
+      </div>
     </div>
-{% endblock %}
-
-{% block compressed-js %}
-    <script src="{% static 'unify-assets/js/helpers/hs.file-attachments.js' %}"></script>
-{% endblock %}
-{% block extrajs %}
-    <!-- JS Plugins Init. -->
-    <script>
-        $(document).on('ready', function () {
-            // initialization of forms
-            $.HSCore.helpers.HSFileAttachments.init();
-        });
-    </script>
+  </div>
 {% endblock %}

@@ -1,14 +1,17 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from django.urls import reverse
+from django.views import View
 from django.views.generic import DetailView, RedirectView, UpdateView
+
+from remote_tutor.users.forms import TutorForm
 
 User = get_user_model()
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
-
     model = User
     slug_field = "username"
     slug_url_kwarg = "username"
@@ -19,7 +22,6 @@ user_detail_view = UserDetailView.as_view()
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
-
     model = User
     fields = ["full_name", "phone_no", "gender"]
 
@@ -34,7 +36,6 @@ user_update_view = UserUpdateView.as_view()
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
-
     permanent = False
 
     def get_redirect_url(self):
@@ -60,3 +61,14 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
         return reverse('users:profile',
                        kwargs={'username': self.request.user.username})
 
+
+class UserTutorView(LoginRequiredMixin, View):
+    def get(self, request):
+        tutor_form = TutorForm()
+        context = {
+            'tutor_form': tutor_form
+        }
+        return render(request, "users/user_tutor.html", context=context)
+
+
+user_tutor_view = UserTutorView.as_view()

@@ -1,28 +1,29 @@
 {% load static %}
 {% block compressed-css %}
-    <link rel="stylesheet" href="{% static 'flags/sprite.css' %}">
+  <link rel="stylesheet" href="{% static 'flags/sprite.css' %}">
 {% endblock %}
 
 <div class="col-md-3 ">
-		     <div class="list-group ">
-              <a href="#" class="list-group-item list-group-item-action">Dashboard</a>
-              <a href="{% url 'users:detail' username=request.user.username %}" class="list-group-item list-group-item-action active">Profile</a>
-              <a href="{% url 'users:update' %}" class="list-group-item list-group-item-action">Edit Profile</a>
-              <a href="{% url 'account_email' %}" class="list-group-item list-group-item-action">Email</a>
-              <a href="#" class="list-group-item list-group-item-action">Enquiry</a>
-              <a href="#" class="list-group-item list-group-item-action">Dealer</a>
-              <a href="#" class="list-group-item list-group-item-action">Media</a>
-              <a href="#" class="list-group-item list-group-item-action">Post</a>
-              <a href="#" class="list-group-item list-group-item-action">Category</a>
-              <a href="#" class="list-group-item list-group-item-action">New</a>
-              <a href="#" class="list-group-item list-group-item-action">Comments</a>
-              <a href="#" class="list-group-item list-group-item-action">Appearance</a>
-              <a href="#" class="list-group-item list-group-item-action">Reports</a>
-              <a href="#" class="list-group-item list-group-item-action">Settings</a>
+  <div class="list-group ">
+    <a href="#" class="list-group-item list-group-item-action">Dashboard</a>
+    <a href="{% url 'users:detail' username=request.user.username %}"
+       class="list-group-item list-group-item-action active">Profile</a>
+    <a href="{% url 'users:update' %}" class="list-group-item list-group-item-action">Edit Profile</a>
+    <a href="{% url 'account_email' %}" class="list-group-item list-group-item-action">Email</a>
+    <a href="{% url 'users:tutor' %}" class="list-group-item list-group-item-action">Tutor</a>
+    <a href="#" class="list-group-item list-group-item-action">Dealer</a>
+    <a href="#" class="list-group-item list-group-item-action">Media</a>
+    <a href="#" class="list-group-item list-group-item-action">Post</a>
+    <a href="#" class="list-group-item list-group-item-action">Category</a>
+    <a href="#" class="list-group-item list-group-item-action">New</a>
+    <a href="#" class="list-group-item list-group-item-action">Comments</a>
+    <a href="#" class="list-group-item list-group-item-action">Appearance</a>
+    <a href="#" class="list-group-item list-group-item-action">Reports</a>
+    <a href="#" class="list-group-item list-group-item-action">Settings</a>
 
 
-            </div>
-		</div>
+  </div>
+</div>
 
 {#<!-- User Image -->#}
 {#<div class="u-block-hover g-pos-rel">#}
