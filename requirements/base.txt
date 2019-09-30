@@ -18,3 +18,5 @@ djangorestframework==3.9.4  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
 
 django-rest-auth #https://django-rest-auth.readthedocs.io/en/latest/installation.html
+
+django_select2 #https://django-select2.readthedocs.io/en/latest/get_started.html#quick-start

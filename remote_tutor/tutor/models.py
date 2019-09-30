@@ -1,13 +1,14 @@
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import MinValueValidator
 from django.db import models
 from model_utils.models import TimeStampedModel, SoftDeletableModel
-
 
 TUITION_TYPE = (
     ("monthly", "Monthly"),
     ("class_number", "Class Number"),
     ("instant", "Instant"),
+    ("contract", "Contract")
 )
 
 CLASS_LEVELS = (
@@ -105,8 +106,8 @@ class Tutor(SoftDeletableModel, TimeStampedModel):
     college = models.ForeignKey(College, on_delete=models.PROTECT, null=True, blank=True)
     school = models.ForeignKey(School, on_delete=models.PROTECT, null=True)
     verified = models.BooleanField(default=False)
-    verified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True,
-                                    related_name="tutor_verifier")
+    verified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True,
+                                    related_name="tutor_verified_by")
 
 
 class Preference(SoftDeletableModel, TimeStampedModel):
@@ -114,3 +115,4 @@ class Preference(SoftDeletableModel, TimeStampedModel):
     tuition_type = models.CharField(max_length=20, choices=TUITION_TYPE, default="monthly")
     class_level = ArrayField(models.CharField(max_length=25, choices=CLASS_LEVELS, default="any"))
     subject = models.ManyToManyField(Subject)
+    salary = models.IntegerField(default=0, validators=[MinValueValidator(500)])

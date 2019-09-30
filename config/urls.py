@@ -23,6 +23,8 @@ urlpatterns = [
                   path("accounts/", include("allauth.urls")),
                   # Your stuff: custom urls includes go here
                   path('api/', include(api_patterns, namespace='api')),
+                  re_path(r'^select2/', include('django_select2.urls')),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

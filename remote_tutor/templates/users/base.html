@@ -15,7 +15,7 @@
 {% block content %}
   <div class="container">
 	<div class="row">
-		{% include 'users/user_sidebar.html' %}
+		{% include 'users/user_sidebar.html'  with active_url=request.resolver_match.url_name %}
 		{% block user_profile %}
 		{% endblock user_profile %}
 	</div>

@@ -1,10 +1,8 @@
 {% extends 'users/base.html' %}
 {% load crispy_forms_tags %}
 {% block title %}{{ request.user.username }}{% endblock %}
-{% block extra_css %}
-    {{ tutor_form.media.css }}
-{% endblock extra_css %}
 {% block user_profile %}
+    {{ tutor_preference_form.media.css }}
 
   <div class="col-md-9">
     <div class="card">
@@ -17,9 +15,11 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <form class="form-horizontal" method="post" action="{% url 'users:tutor' %}">
+            <form class="form-horizontal" method="post" action="{% url 'users:tutor_preference' %}">
+
                 {% csrf_token %}
-                {{ tutor_form|crispy }}
+                {{ tutor_preference_form|crispy }}
+
               <div class="control-group">
                 <div class="controls">
                   <button type="submit" class="btn">Update</button>
@@ -32,10 +32,9 @@
       </div>
     </div>
   </div>
-
 {% endblock %}
 {% block extra_js %}
-    {{ tutor_form.media.js }}
+    {{ tutor_preference_form.media.js }}
   <script type="text/javascript">
 
   </script>

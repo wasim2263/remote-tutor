@@ -14,5 +14,5 @@ class Student(SoftDeletableModel, TimeStampedModel):
     college = models.ForeignKey(College, on_delete=models.PROTECT, null=True, blank=True)
     school = models.ForeignKey(School, on_delete=models.PROTECT, null=True)
     verified = models.BooleanField(default=False)
-    verified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True,
+    verified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True,
                                     related_name="student_verifier")
