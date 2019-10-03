@@ -99,7 +99,7 @@ class UserTutorView(LoginRequiredMixin, View):
 user_tutor_view = UserTutorView.as_view()
 
 
-class UserTutorPreference(LoginRequiredMixin, UpdateView):
+class UserTutorPreference(LoginRequiredMixin, View):
 
     def get(self, request):
         try:
@@ -144,3 +144,10 @@ class UserTutorPreference(LoginRequiredMixin, UpdateView):
 
 
 user_tutor_preference_view = UserTutorPreference.as_view()
+
+
+class UserStudentView(LoginRequiredMixin, View):
+    pass
+
+
+user_student_view = UserStudentView.as_view()

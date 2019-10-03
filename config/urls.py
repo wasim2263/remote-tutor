@@ -12,7 +12,8 @@ api_patterns = ([
                 ], 'api')
 
 urlpatterns = [
-                  path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+                  # path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+
                   path(
                       "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
                   ),
@@ -24,6 +25,7 @@ urlpatterns = [
                   # Your stuff: custom urls includes go here
                   path('api/', include(api_patterns, namespace='api')),
                   re_path(r'^select2/', include('django_select2.urls')),
+                  path("", include('remote_tutor.home.urls')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

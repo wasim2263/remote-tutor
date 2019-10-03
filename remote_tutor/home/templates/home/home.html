@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+  <div class="row"></div>
+  <div class="col-md-6">
+      {% for tutor in tutors %}
+        <div class="card" style="width: 18rem;">
+{#          <img src="..." class="card-img-top" alt="...">#}
+          <div class="card-body">
+            <h5 class="card-title">{{ tutor.user.full_name }}</h5>
+            <p class="card-text">School: {{ tutor.school }}</p>
+            <p class="card-text">College: {{ tutor.college }}</p>
+            <p class="card-text">University: {{ tutor.university }}</p>
+            <p class="card-text">Department: {{ tutor.department }}</p>
+            <p class="card-text">Subjects: {% for subject in tutor.preference.subject.all %}
+                {{ subject }}{% if not forloop.last %},
+                {% endif %}
+            {% endfor %}</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+          </div>
+        </div>
+      {% endfor %}
+
+  </div>
+{% endblock content %}
+{% block extra_js %}
+
+{% endblock extra_js %}

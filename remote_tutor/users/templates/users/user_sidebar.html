@@ -8,17 +8,17 @@
     <a href="#" class="list-group-item list-group-item-action">Dashboard</a>
     <a href="{% url 'users:detail' username=request.user.username %}"
        class="list-group-item list-group-item-action {% if active_url == 'detail' %} active {% endif %}">Profile</a>
-    <a href="{% url 'users:update' %}" class="list-group-item list-group-item-action {% if active_url == 'update' %} active {% endif %}">Edit Profile</a>
-    <a href="{% url 'account_email' %}" class="list-group-item list-group-item-action {% if active_url == 'account_email' %} active {% endif %}">Email</a>
-    <a href="{% url 'users:tutor' %}" class="list-group-item list-group-item-action {% if active_url == 'tutor' %} active {% endif %}">Tutor</a>
-    <a href="{% url 'users:tutor_preference' %}" class="list-group-item list-group-item-action {% if active_url == 'tutor_preference' %} active {% endif %}">Preference</a>
-    <a href="#" class="list-group-item list-group-item-action">Media</a>
-    <a href="#" class="list-group-item list-group-item-action">Post</a>
-    <a href="#" class="list-group-item list-group-item-action">Category</a>
-    <a href="#" class="list-group-item list-group-item-action">New</a>
-    <a href="#" class="list-group-item list-group-item-action">Comments</a>
-    <a href="#" class="list-group-item list-group-item-action">Appearance</a>
-    <a href="#" class="list-group-item list-group-item-action">Reports</a>
+    <a href="{% url 'users:update' %}"
+       class="list-group-item list-group-item-action {% if active_url == 'update' %} active {% endif %}">Edit
+      Profile</a>
+    <a href="{% url 'account_email' %}"
+       class="list-group-item list-group-item-action {% if active_url == 'account_email' %} active {% endif %}">Email</a>
+    <a href="{% url 'users:tutor' %}"
+       class="list-group-item list-group-item-action {% if active_url == 'tutor' %} active {% endif %}">Tutor</a>
+    <a href="{% url 'users:tutor_preference' %}"
+       class="list-group-item list-group-item-action {% if active_url == 'tutor_preference' %} active {% endif %}">Preference</a>
+    <a href="{% url 'users:student' %}"
+       class="list-group-item list-group-item-action {% if active_url == 'student' %} active {% endif %}">Student</a>
     <a href="#" class="list-group-item list-group-item-action">Settings</a>
 
 

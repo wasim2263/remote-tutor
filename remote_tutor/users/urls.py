@@ -1,7 +1,7 @@
 from django.urls import path
 
-from remote_tutor.users.views import (user_redirect_view, user_update_view, user_detail_view, user_tutor_view,
-                                      user_tutor_preference_view)
+from .views import (user_redirect_view, user_update_view, user_detail_view, user_tutor_view,
+                    user_tutor_preference_view, user_student_view)
 
 app_name = "users"
 urlpatterns = [
@@ -9,5 +9,6 @@ urlpatterns = [
     path("~update/", view=user_update_view, name="update"),
     path("<str:username>/", view=user_detail_view, name="detail"),
     path("~tutor/edit/", view=user_tutor_view, name="tutor"),
+    path("~student/edit/", view=user_student_view, name="student"),
     path("~tutor/preference/", view=user_tutor_preference_view, name="tutor_preference"),
 ]
