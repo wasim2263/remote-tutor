@@ -5,7 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_select2.forms import Select2MultipleWidget, Select2Widget
 
+from remote_tutor.student.models import Student
 from remote_tutor.tutor.models import Tutor, Preference, CLASS_LEVELS, School
+from remote_tutor.users.models import Profile
 
 User = get_user_model()
 
@@ -34,10 +36,10 @@ class UserCreationForm(forms.UserCreationForm):
         raise ValidationError(self.error_messages["duplicate_username"])
 
 
-class TutorForm(django_forms.ModelForm):
+class ProfileForm(django_forms.ModelForm):
     class Meta:
-        model = Tutor
-        fields = ['school', 'college', 'university', 'department', 'current_occupation', 'current_institute', ]
+        model = Profile
+        fields = ['date_of_birth','school', 'college', 'university', 'department', 'current_occupation', 'current_institute', ]
         widgets = {
             "school": Select2Widget,
             "college": Select2Widget,
@@ -45,6 +47,18 @@ class TutorForm(django_forms.ModelForm):
             "department": Select2Widget,
             "current_occupation": Select2Widget,
         }
+
+
+class TutorForm(django_forms.ModelForm):
+    class Meta:
+        model = Tutor
+        fields = ['nid']
+
+
+class StudentForm(django_forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ['guardian_email']
 
 
 class TutorPreferenceForm(django_forms.ModelForm):

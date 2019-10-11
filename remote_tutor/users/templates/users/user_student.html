@@ -17,10 +17,10 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <form class="form-horizontal" method="post" action="{% url 'users:tutor' %}">
+            <form class="form-horizontal" method="post" action="{% url 'users:student' %}">
                 {% csrf_token %}
                 {{ user_profile_form|crispy }}
-                {{ tutor_form|crispy }}
+                {{ student_form|crispy }}
               <div class="control-group">
                 <div class="controls">
                   <button type="submit" class="btn">Update</button>

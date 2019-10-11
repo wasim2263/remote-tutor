@@ -19,6 +19,8 @@
        class="list-group-item list-group-item-action {% if active_url == 'tutor_preference' %} active {% endif %}">Preference</a>
     <a href="{% url 'users:student' %}"
        class="list-group-item list-group-item-action {% if active_url == 'student' %} active {% endif %}">Student</a>
+   <a href="{% url 'users:tuition_list' %}"
+       class="list-group-item list-group-item-action {% if active_url == 'tuition_list' %} active {% endif %}">Tuition List</a>
     <a href="#" class="list-group-item list-group-item-action">Settings</a>
 
 

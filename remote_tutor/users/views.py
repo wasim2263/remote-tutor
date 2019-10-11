@@ -6,8 +6,11 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import DetailView, RedirectView, UpdateView
+
+from remote_tutor.tuition.models import Tuition
 from remote_tutor.tutor.models import Tutor, Subject
-from remote_tutor.users.forms import TutorForm, TutorPreferenceForm
+from remote_tutor.users.forms import TutorForm, TutorPreferenceForm, ProfileForm, StudentForm
+from remote_tutor.users.models import Profile
 
 User = get_user_model()
 
@@ -64,33 +67,53 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 
 class UserTutorView(LoginRequiredMixin, View):
-    def get(self, request):
+    @staticmethod
+    def get_profile_and_tutor(request):
         try:
-            tutor = request.user.tutor
-        except User.tutor.RelatedObjectDoesNotExist:
+            user_profile = request.user.profile
+        except User.profile.RelatedObjectDoesNotExist:
+            user_profile = None
+
+        if user_profile:
+            try:
+                tutor = user_profile.tutor
+            except Profile.tutor.RelatedObjectDoesNotExist:
+                tutor = None
+        else:
             tutor = None
+
+        return user_profile, tutor
+
+    def get(self, request):
+
+        user_profile, tutor = self.get_profile_and_tutor(request)
         tutor_form = TutorForm(instance=tutor)
+        user_profile_form = ProfileForm(instance=user_profile)
         context = {
+            'user_profile_form': user_profile_form,
             'tutor_form': tutor_form
         }
         return render(request, "users/user_tutor.html", context=context)
 
     def post(self, request):
-        try:
-            old_tutor = request.user.tutor
-        except User.tutor.RelatedObjectDoesNotExist:
-            old_tutor = None
+        old_user_profile, old_tutor = self.get_profile_and_tutor(request)
+        user_profile_form = ProfileForm(request.POST, instance=old_user_profile)
         tutor_form = TutorForm(request.POST, instance=old_tutor)
-        if tutor_form.is_valid():
+        if user_profile_form.is_valid() and tutor_form.is_valid():
+
+            user_profile = user_profile_form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+
             tutor = tutor_form.save(commit=False)
-            tutor.user = request.user
+            tutor.user_profile = user_profile
             tutor.save()
             if old_tutor:
                 return redirect("users:tutor")
             else:
                 return redirect("users:tutor_preference")
-
         context = {
+            'user_profile_form': user_profile_form,
             'tutor_form': tutor_form
         }
         return render(request, "users/user_tutor.html", context=context)
@@ -100,15 +123,23 @@ user_tutor_view = UserTutorView.as_view()
 
 
 class UserTutorPreference(LoginRequiredMixin, View):
-
-    def get(self, request):
+    @staticmethod
+    def get_tutor_preference(request):
         try:
-            tutor_preference = request.user.tutor.preference
-        except User.tutor.RelatedObjectDoesNotExist:
+            tutor_preference = request.user.profile.tutor.preference
+        except User.profile.RelatedObjectDoesNotExist:
+            messages.info(request, _("Fill up this form to become a tutor."))
+            return redirect("users:tutor")
+        except Profile.tutor.RelatedObjectDoesNotExist:
             messages.info(request, _("Fill up this form to become a tutor."))
             return redirect("users:tutor")
         except Tutor.preference.RelatedObjectDoesNotExist:
             tutor_preference = None
+
+        return tutor_preference
+
+    def get(self, request):
+        tutor_preference = self.get_tutor_preference(request)
         tutor_preference_form = TutorPreferenceForm(instance=tutor_preference)
         context = {
             'tutor_preference_form': tutor_preference_form
@@ -116,17 +147,11 @@ class UserTutorPreference(LoginRequiredMixin, View):
         return render(request, "users/user_tutor_preference.html", context=context)
 
     def post(self, request):
-        try:
-            old_tutor_preference = request.user.tutor.preference
-        except User.tutor.RelatedObjectDoesNotExist:
-            messages.info(request, _("Fill up this form to become a tutor."))
-            return redirect("users:tutor")
-        except Tutor.preference.RelatedObjectDoesNotExist:
-            old_tutor_preference = None
+        old_tutor_preference = self.get_tutor_preference(request)
         tutor_preference_form = TutorPreferenceForm(request.POST, instance=old_tutor_preference)
         if tutor_preference_form.is_valid():
             tutor_preference = tutor_preference_form.save(commit=False)
-            tutor_preference.tutor = request.user.tutor
+            tutor_preference.tutor = request.user.profile.tutor
             tutor_preference.save()
             new_subjects = tutor_preference_form.cleaned_data['subject']
             for subject in new_subjects:
@@ -147,7 +172,122 @@ user_tutor_preference_view = UserTutorPreference.as_view()
 
 
 class UserStudentView(LoginRequiredMixin, View):
-    pass
+    @staticmethod
+    def get_profile_and_student(request):
+        try:
+            user_profile = request.user.profile
+        except User.profile.RelatedObjectDoesNotExist:
+            user_profile = None
+
+        if user_profile:
+            try:
+                student = user_profile.student
+            except Profile.student.RelatedObjectDoesNotExist:
+                student = None
+        else:
+            student = None
+
+        return user_profile, student
+
+    def get(self, request):
+
+        user_profile, student = self.get_profile_and_student(request)
+        student_form = StudentForm(instance=student)
+        user_profile_form = ProfileForm(instance=user_profile)
+        context = {
+            'user_profile_form': user_profile_form,
+            'student_form': student_form
+        }
+        return render(request, "users/user_student.html", context=context)
+
+    def post(self, request):
+        old_user_profile, old_student = self.get_profile_and_student(request)
+        user_profile_form = ProfileForm(request.POST, instance=old_user_profile)
+        student_form = StudentForm(request.POST, instance=old_student)
+        if user_profile_form.is_valid() and student_form.is_valid():
+
+            user_profile = user_profile_form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+
+            student = student_form.save(commit=False)
+            student.user_profile = user_profile
+            student.save()
+            if student:
+                return redirect("users:student")
+
+        context = {
+            'user_profile_form': user_profile_form,
+            'student_form': student_form
+        }
+        return render(request, "users/user_student.html", context=context)
 
 
 user_student_view = UserStudentView.as_view()
+
+
+class UserTuitionListView(LoginRequiredMixin, View):
+    def get(self, request):
+        tuition_list = Tuition.objects.filter(tutor=request.user.profile.tutor)
+        context = {
+            'tuition_list': tuition_list,
+        }
+        return render(request, "users/user_tuition_list.html", context=context)
+
+
+user_tuition_list_view = UserTuitionListView.as_view()
+#
+#
+# class UserTuitionView(LoginRequiredMixin, View):
+#     @staticmethod
+#     def get_profile_and_student(request):
+#         try:
+#             user_profile = request.user.profile
+#         except User.profile.RelatedObjectDoesNotExist:
+#             user_profile = None
+#
+#         if user_profile:
+#             try:
+#                 student = user_profile.student
+#             except Profile.student.RelatedObjectDoesNotExist:
+#                 student = None
+#         else:
+#             student = None
+#
+#         return user_profile, student
+#
+#     def get(self, request):
+#
+#         user_profile, student = self.get_profile_and_student(request)
+#         student_form = StudentForm(instance=student)
+#         user_profile_form = ProfileForm(instance=user_profile)
+#         context = {
+#             'user_profile_form': user_profile_form,
+#             'student_form': student_form
+#         }
+#         return render(request, "users/user_student.html", context=context)
+#
+#     def post(self, request):
+#         old_user_profile, old_student = self.get_profile_and_student(request)
+#         user_profile_form = ProfileForm(request.POST, instance=old_user_profile)
+#         student_form = StudentForm(request.POST, instance=old_student)
+#         if user_profile_form.is_valid() and student_form.is_valid():
+#
+#             user_profile = user_profile_form.save(commit=False)
+#             user_profile.user = request.user
+#             user_profile.save()
+#
+#             student = student_form.save(commit=False)
+#             student.user_profile = user_profile
+#             student.save()
+#             if student:
+#                 return redirect("users:student")
+#
+#         context = {
+#             'user_profile_form': user_profile_form,
+#             'student_form': student_form
+#         }
+#         return render(request, "users/user_student.html", context=context)
+#
+#
+# user_student_view = UserStudentView.as_view()
