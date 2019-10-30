@@ -12,7 +12,6 @@ TUITION_TYPE = (
 )
 
 CLASS_LEVELS = (
-    ("any", "Any"),
     ("class_1", "Class 1"),
     ("class_2", "Class 2"),
     ("class_3", "Class 3"),
@@ -107,3 +106,5 @@ class Preference(SoftDeletableModel, TimeStampedModel):
     class_level = ArrayField(models.CharField(max_length=25, choices=CLASS_LEVELS, default="any"))
     subject = models.ManyToManyField(Subject)
     salary = models.IntegerField(default=0, validators=[MinValueValidator(500)])
+
+

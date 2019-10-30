@@ -1,28 +1,61 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n crispy_forms_tags %}
+{% load tutor_templatetags %}
+{% block extra_css %}
+    {{ find_tutor_form.media.css }}
+{% endblock extra_css %}
 {% block content %}
-  <div class="row"></div>
-  <div class="col-md-6">
-      {% for tutor in tutors %}
-        <div class="card" style="width: 18rem;">
-{#          <img src="..." class="card-img-top" alt="...">#}
-          <div class="card-body">
-            <h5 class="card-title">{{ tutor.user.full_name }}</h5>
-            <p class="card-text">School: {{ tutor.school }}</p>
-            <p class="card-text">College: {{ tutor.college }}</p>
-            <p class="card-text">University: {{ tutor.university }}</p>
-            <p class="card-text">Department: {{ tutor.department }}</p>
-            <p class="card-text">Subjects: {% for subject in tutor.preference.subject.all %}
-                {{ subject }}{% if not forloop.last %},
-                {% endif %}
-            {% endfor %}</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+
+            <div class="card-body">
+              <form action="">
+                  {{ find_tutor_form|crispy }}
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
           </div>
         </div>
-      {% endfor %}
+      </div>
+      <div class="row">
+          {% for tutor in tutors %}
+              {% if tutor.user_profile %}
+                <div class="col-md-6">
+                  <div class="card">
+                      {#          <img src="..." class="card-img-top" alt="...">#}
+                    <div class="card-body">
+                      <h5 class="card-title">{{ tutor.user_profile.user.full_name }}</h5>
+                      <p class="card-text">School: {{ tutor.user_profile.school }}</p>
+                      <p class="card-text">College: {{ tutor.user_profile.college }}</p>
+                      <p class="card-text">University: {{ tutor.user_profile.university }}</p>
+                      <p class="card-text">Department: {{ tutor.user_profile.department }}</p>
+                      <p class="card-text">Subjects: {% for subject in tutor.preference.subject.all %}
+                          {{ subject }}{% if not forloop.last %},
+                          {% endif %}
+                      {% endfor %}</p>
+                      <p class="card-text">Class: {% for single_class in tutor.preference.class_level %}
+                          {{ class_levels|lookup:single_class }}{% if not forloop.last %},
+                          {% endif %}
+                      {% endfor %}</p>
+                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
 
+          {% endfor %}
+
+      </div>
+    </div>
+    <div class="col-md-6">
+      student
+    </div>
   </div>
 {% endblock content %}
 {% block extra_js %}
+    {{ find_tutor_form.media.js }}
 
 {% endblock extra_js %}

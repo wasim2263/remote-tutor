@@ -39,7 +39,8 @@ class UserCreationForm(forms.UserCreationForm):
 class ProfileForm(django_forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['date_of_birth','school', 'college', 'university', 'department', 'current_occupation', 'current_institute', ]
+        fields = ['date_of_birth', 'school', 'college', 'university', 'department', 'current_occupation',
+                  'current_institute', ]
         widgets = {
             "school": Select2Widget,
             "college": Select2Widget,
