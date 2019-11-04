@@ -17,7 +17,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <form class="form-horizontal" method="post" action="{% url 'users:student' %}">
+            <form class="form-horizontal" method="post" action="">
                 {% csrf_token %}
                 {{ user_profile_form|crispy }}
                 {{ student_form|crispy }}

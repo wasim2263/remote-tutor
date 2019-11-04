@@ -36,7 +36,7 @@ class Lecture(SoftDeletableModel, TimeStampedModel):
                                                       ("finished", _("finished")),), default="started")
 
 
-class RequestTutor(SoftDeletableModel, TimeStampedModel):
+class RequestTuition(SoftDeletableModel, TimeStampedModel):
     tuition=models.ForeignKey(Tuition, on_delete=models.CASCADE)
     tutor = models.ForeignKey(Tutor, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=TUITION_REQUEST_STATUS_CHOICES, default="pending")

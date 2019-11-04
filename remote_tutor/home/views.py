@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views import View
 
 from remote_tutor.home.forms import FindTutorForm
+from remote_tutor.tuition.models import Tuition
 from remote_tutor.tutor.models import Tutor, CLASS_LEVELS
 
 
@@ -14,12 +15,13 @@ class HomeView(View):
             tutors = find_tutor_form.get_tutor_list()
         else:
             tutors = Tutor.objects.filter().select_related('preference', 'user_profile', )
-        print(dict(CLASS_LEVELS))
 
+        tuition = Tuition.objects.filter(tutor=None)
         context = {
             'tutors': tutors,
             'find_tutor_form': find_tutor_form,
-            'class_levels': dict(CLASS_LEVELS)
+            'class_levels': dict(CLASS_LEVELS),
+            'tuition': tuition
         }
         return render(request, 'home/home.html', context=context)
 

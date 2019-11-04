@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import View
@@ -9,7 +9,7 @@ from django.views.generic import DetailView, RedirectView, UpdateView
 
 from remote_tutor.tuition.models import Tuition
 from remote_tutor.tutor.models import Tutor, Subject
-from remote_tutor.users.forms import TutorForm, TutorPreferenceForm, ProfileForm, StudentForm
+from remote_tutor.users.forms import TutorForm, TutorPreferenceForm, ProfileForm, StudentForm, TuitionForm
 from remote_tutor.users.models import Profile
 
 User = get_user_model()
@@ -236,6 +236,63 @@ class UserTuitionListView(LoginRequiredMixin, View):
 
 
 user_tuition_list_view = UserTuitionListView.as_view()
+
+
+class UserCreateTuition(LoginRequiredMixin, View):
+    def get(self, request, tuition_id):
+        # get old coupon data for edit view
+        if tuition_id is not None:
+            tuition = get_object_or_404(Tuition, pk=tuition_id, student__user_profile=request.user.profile)
+        else:
+            tuition = None
+        tuition_form = TuitionForm(instance=tuition)
+        context = {'tuition_form': tuition_form,
+                   'tuition_id': tuition_id
+                   }
+
+        return render(request, "users/user_tuition.html", context=context)
+
+    def post(self, request, tuition_id):
+        """
+
+        :param request:
+        :param tuition_id:
+        :return:
+        """
+        # changing success message for add and edit template
+        if tuition_id is None:
+            old_tuition = None
+            message = _("New tuition added successfully!")
+        else:
+            old_tuition = get_object_or_404(Tuition, pk=tuition_id, student__user_profile=request.user.profile)
+            message = _("Tuition updated successfully!")
+
+        tuition_form = TuitionForm(request.POST, instance=old_tuition)
+
+        if tuition_form.is_valid():
+            tuition = tuition_form.save(commit=False)
+            tuition.student = request.user.profile.student
+            tuition.save()
+            new_subjects = tuition_form.cleaned_data['subject']
+            for subject in new_subjects:
+                tuition.subject.add(subject)
+            old_subjects = Subject.objects.filter(tuition=tuition)
+            for subject in old_subjects:
+                if subject not in new_subjects:
+                    tuition.subject.remove(subject)
+
+            messages.success(request, message)
+            # redirect to edit page
+            return redirect("users:edit_tuition", tuition_id=tuition.pk)
+
+        context = {'tuition_form': tuition_form,
+                   'tuition_id': tuition_id
+                   }
+
+        return render(request, 'users/user_tuition.html', context=context)
+
+
+user_create_tuition_view = UserCreateTuition.as_view()
 #
 #
 # class UserTuitionView(LoginRequiredMixin, View):

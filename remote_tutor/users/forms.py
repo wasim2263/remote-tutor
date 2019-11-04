@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_select2.forms import Select2MultipleWidget, Select2Widget
 
 from remote_tutor.student.models import Student
+from remote_tutor.tuition.models import Tuition
 from remote_tutor.tutor.models import Tutor, Preference, CLASS_LEVELS, School
 from remote_tutor.users.models import Profile
 
@@ -72,6 +73,15 @@ class TutorPreferenceForm(django_forms.ModelForm):
     class Meta:
         model = Preference
         fields = ['tuition_type', 'class_level', 'subject', 'salary']
+        widgets = {
+            "subject": Select2MultipleWidget
+        }
+
+
+class TuitionForm(django_forms.ModelForm):
+    class Meta:
+        model = Tuition
+        fields = ['tuition_type', 'lectures', 'subject', 'salary']
         widgets = {
             "subject": Select2MultipleWidget
         }
