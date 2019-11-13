@@ -9,8 +9,16 @@
 
     <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home:students' %}">Stdent <span class="sr-only">(current)</span></a>
+
+        </li>
+        <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home:tutors' %}">Tutor <span class="sr-only">(current)</span></a>
+
         </li>
           {#                <li class="nav-item dropdown">#}
           {#                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"#}
