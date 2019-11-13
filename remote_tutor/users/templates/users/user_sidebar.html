@@ -15,12 +15,16 @@
        class="list-group-item list-group-item-action {% if active_url == 'account_email' %} active {% endif %}">Email</a>
     <a href="{% url 'users:tutor' %}"
        class="list-group-item list-group-item-action {% if active_url == 'tutor' %} active {% endif %}">Tutor</a>
-    <a href="{% url 'users:tutor_preference' %}"
-       class="list-group-item list-group-item-action {% if active_url == 'tutor_preference' %} active {% endif %}">Preference</a>
+      {% if user.tutor %}
+
+        <a href="{% url 'users:tutor_preference' %}"
+           class="list-group-item list-group-item-action {% if active_url == 'tutor_preference' %} active {% endif %}">Preference</a>
+      {% endif %}
     <a href="{% url 'users:student' %}"
        class="list-group-item list-group-item-action {% if active_url == 'student' %} active {% endif %}">Student</a>
-   <a href="{% url 'users:tuition_list' %}"
-       class="list-group-item list-group-item-action {% if active_url == 'tuition_list' %} active {% endif %}">Tuition List</a>
+    <a href="{% url 'users:tuition_list' %}"
+       class="list-group-item list-group-item-action {% if active_url == 'tuition_list' %} active {% endif %}">Tuition
+      List</a>
     <a href="#" class="list-group-item list-group-item-action">Settings</a>
 
 

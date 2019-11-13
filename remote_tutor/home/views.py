@@ -14,7 +14,7 @@ class HomeView(View):
         if find_tutor_form.is_valid():
             tutors = find_tutor_form.get_tutor_list()
         else:
-            tutors = Tutor.objects.filter().select_related('preference', 'user_profile', )
+            tutors = Tutor.objects.filter(user__isnull=False).select_related('preference').prefetch_related('user__profile')
 
         tuition = Tuition.objects.filter(tutor=None)
         context = {
@@ -23,6 +23,7 @@ class HomeView(View):
             'class_levels': dict(CLASS_LEVELS),
             'tuition': tuition
         }
+
         return render(request, 'home/home.html', context=context)
 
 

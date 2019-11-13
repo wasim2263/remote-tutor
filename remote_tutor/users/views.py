@@ -76,8 +76,8 @@ class UserTutorView(LoginRequiredMixin, View):
 
         if user_profile:
             try:
-                tutor = user_profile.tutor
-            except Profile.tutor.RelatedObjectDoesNotExist:
+                tutor = request.user.tutor
+            except User.tutor.RelatedObjectDoesNotExist:
                 tutor = None
         else:
             tutor = None
@@ -106,7 +106,7 @@ class UserTutorView(LoginRequiredMixin, View):
             user_profile.save()
 
             tutor = tutor_form.save(commit=False)
-            tutor.user_profile = user_profile
+            tutor.user = request.user
             tutor.save()
             if old_tutor:
                 return redirect("users:tutor")
@@ -126,13 +126,9 @@ class UserTutorPreference(LoginRequiredMixin, View):
     @staticmethod
     def get_tutor_preference(request):
         try:
-            tutor_preference = request.user.profile.tutor.preference
-        except User.profile.RelatedObjectDoesNotExist:
-            messages.info(request, _("Fill up this form to become a tutor."))
-            return redirect("users:tutor")
-        except Profile.tutor.RelatedObjectDoesNotExist:
-            messages.info(request, _("Fill up this form to become a tutor."))
-            return redirect("users:tutor")
+            tutor_preference = request.user.tutor.preference
+        except User.tutor.RelatedObjectDoesNotExist:
+            raise PermissionError
         except Tutor.preference.RelatedObjectDoesNotExist:
             tutor_preference = None
 
@@ -140,7 +136,9 @@ class UserTutorPreference(LoginRequiredMixin, View):
 
     def get(self, request):
         tutor_preference = self.get_tutor_preference(request)
+
         tutor_preference_form = TutorPreferenceForm(instance=tutor_preference)
+
         context = {
             'tutor_preference_form': tutor_preference_form
         }
@@ -151,7 +149,7 @@ class UserTutorPreference(LoginRequiredMixin, View):
         tutor_preference_form = TutorPreferenceForm(request.POST, instance=old_tutor_preference)
         if tutor_preference_form.is_valid():
             tutor_preference = tutor_preference_form.save(commit=False)
-            tutor_preference.tutor = request.user.profile.tutor
+            tutor_preference.tutor = request.user.tutor
             tutor_preference.save()
             new_subjects = tutor_preference_form.cleaned_data['subject']
             for subject in new_subjects:
@@ -181,8 +179,8 @@ class UserStudentView(LoginRequiredMixin, View):
 
         if user_profile:
             try:
-                student = user_profile.student
-            except Profile.student.RelatedObjectDoesNotExist:
+                student = request.user.student
+            except User.student.RelatedObjectDoesNotExist:
                 student = None
         else:
             student = None
@@ -211,7 +209,7 @@ class UserStudentView(LoginRequiredMixin, View):
             user_profile.save()
 
             student = student_form.save(commit=False)
-            student.user_profile = user_profile
+            student.user = request.user
             student.save()
             if student:
                 return redirect("users:student")
@@ -228,7 +226,7 @@ user_student_view = UserStudentView.as_view()
 
 class UserTuitionListView(LoginRequiredMixin, View):
     def get(self, request):
-        tuition_list = Tuition.objects.filter(tutor=request.user.profile.tutor)
+        tuition_list = Tuition.objects.filter(tutor=request.user.tutor)
         context = {
             'tuition_list': tuition_list,
         }
@@ -242,7 +240,7 @@ class UserCreateTuition(LoginRequiredMixin, View):
     def get(self, request, tuition_id):
         # get old coupon data for edit view
         if tuition_id is not None:
-            tuition = get_object_or_404(Tuition, pk=tuition_id, student__user_profile=request.user.profile)
+            tuition = get_object_or_404(Tuition, pk=tuition_id, student__user=request.user)
         else:
             tuition = None
         tuition_form = TuitionForm(instance=tuition)
@@ -264,14 +262,14 @@ class UserCreateTuition(LoginRequiredMixin, View):
             old_tuition = None
             message = _("New tuition added successfully!")
         else:
-            old_tuition = get_object_or_404(Tuition, pk=tuition_id, student__user_profile=request.user.profile)
+            old_tuition = get_object_or_404(Tuition, pk=tuition_id, student__user=request.user)
             message = _("Tuition updated successfully!")
 
         tuition_form = TuitionForm(request.POST, instance=old_tuition)
 
         if tuition_form.is_valid():
             tuition = tuition_form.save(commit=False)
-            tuition.student = request.user.profile.student
+            tuition.student = request.user.student
             tuition.save()
             new_subjects = tuition_form.cleaned_data['subject']
             for subject in new_subjects:
@@ -285,9 +283,10 @@ class UserCreateTuition(LoginRequiredMixin, View):
             # redirect to edit page
             return redirect("users:edit_tuition", tuition_id=tuition.pk)
 
-        context = {'tuition_form': tuition_form,
-                   'tuition_id': tuition_id
-                   }
+        context = {
+            'tuition_form': tuition_form,
+            'tuition_id': tuition_id
+        }
 
         return render(request, 'users/user_tuition.html', context=context)
 

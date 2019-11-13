@@ -22,16 +22,16 @@
       </div>
       <div class="row">
           {% for tutor in tutors %}
-              {% if tutor.user_profile %}
+{#              {% if tutor.user %}#}
                 <div class="col-md-6">
                   <div class="card">
                       {#          <img src="..." class="card-img-top" alt="...">#}
                     <div class="card-body">
-                      <h5 class="card-title">{{ tutor.user_profile.user.full_name }}</h5>
-                      <p class="card-text">School: {{ tutor.user_profile.school }}</p>
-                      <p class="card-text">College: {{ tutor.user_profile.college }}</p>
-                      <p class="card-text">University: {{ tutor.user_profile.university }}</p>
-                      <p class="card-text">Department: {{ tutor.user_profile.department }}</p>
+                      <h5 class="card-title">{{ tutor.user.full_name }}</h5>
+                      <p class="card-text">School: {{ tutor.user.profile.school }}</p>
+                      <p class="card-text">College: {{ tutor.user.profile.college }}</p>
+                      <p class="card-text">University: {{ tutor.user.profile.university }}</p>
+                      <p class="card-text">Department: {{ tutor.user.profile.department }}</p>
                       <p class="card-text">Subjects: {% for subject in tutor.preference.subject.all %}
                           {{ subject }}{% if not forloop.last %},
                           {% endif %}
@@ -44,8 +44,7 @@
                     </div>
                   </div>
                 </div>
-              {% endif %}
-
+{#              {% endif %}#}
           {% endfor %}
 
       </div>

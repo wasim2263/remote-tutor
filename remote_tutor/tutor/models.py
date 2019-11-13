@@ -96,7 +96,7 @@ class Occupation(SoftDeletableModel, TimeStampedModel):
 
 
 class Tutor(SoftDeletableModel, TimeStampedModel):
-    user_profile = models.OneToOneField('users.Profile', on_delete=models.SET_NULL, null=True)
+    user = models.OneToOneField('users.User', on_delete=models.SET_NULL, null=True)
     nid = models.IntegerField(unique=True, null=True)
 
 

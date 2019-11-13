@@ -20,18 +20,18 @@ class FindTutorForm(forms.Form):
         department = self.cleaned_data['department']
         subject = self.cleaned_data['subject']
         class_level = self.cleaned_data['class_level']
-        tutor = Tutor.objects.filter().select_related('preference', 'user_profile').distinct()
+        tutor = Tutor.objects.filter(user__isnull=False).select_related('preference').prefetch_related('user__profile').distinct()
         if school:
-            tutor = tutor.filter(user_profile__school=school)
+            tutor = tutor.filter(user__profile__school=school)
 
         if college:
-            tutor = tutor.filter(user_profile__college=college)
+            tutor = tutor.filter(user__profile__college=college)
 
         if university:
-            tutor = tutor.filter(user_profile__university=university)
+            tutor = tutor.filter(user__profile__university=university)
 
         if department:
-            tutor = tutor.filter(user_profile__department=department)
+            tutor = tutor.filter(user__profile__department=department)
 
         if subject:
             tutor = tutor.filter(preference__subject__in=subject)
